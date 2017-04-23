@@ -26,6 +26,14 @@ Please meditate on the following code:
 You are now 0/169 koans and 0/25 lessons closer to reaching enlightenment
 ```
 
+ANSI escape sequences were used in `contemplate.lsp`, to give colored output.
+Eyecandy is nice for single runs, but cannot be used properly with `watch`.
+To have the test suite be runnning permanently with automatically with
+updated output, for a workaround there exists a second 'contemplate' file,
+which can be run properly, i.e.:
+
+    watch -n1 -d "sbcl --script contemplate-colorless.lsp | tail -n 25"
+
 This indicates that the script has completed, and that the learner should look
 to asserts.lsp to locate and fix the problem.  The problem will be within
 a define-test expression such as
