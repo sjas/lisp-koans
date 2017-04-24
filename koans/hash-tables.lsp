@@ -109,17 +109,21 @@
       (setf value-and-exists (multiple-value-list (gethash "Obama" prev-pres)))
       (assert-equal value-and-exists '("Bush" t))
       (setf value-and-exists (multiple-value-list (gethash "Lincoln" prev-pres)))
-      (assert-equal value-and-exists ____)
+      (assert-equal value-and-exists '("Buchanan" t))
       (setf value-and-exists (multiple-value-list (gethash "Washington" prev-pres)))
-      (assert-equal value-and-exists ____)
+      (assert-equal value-and-exists '(nil t))
       (setf value-and-exists (multiple-value-list (gethash "Franklin" prev-pres)))
-      (assert-equal value-and-exists ____)))
+      (assert-equal value-and-exists '(nil nil))))
 
 
 (define-test test-make-your-own-hash-table
-    "make a hash table that meets the following conditions"
-  (let ((colors (make-hash-table))
+  "make a hash table that meets the following conditions"
+  (let ((colors (make-hash-table :test #'equal))
         values)
+    (setf (gethash "blue"  colors) '(0 0 1))
+    (setf (gethash "green" colors) '(0 1 0))
+    (setf (gethash "red"   colors) '(1 0 0))
+    (setf (gethash "none" colors) nil)
 
     (assert-equal (hash-table-count colors) 4)
     (setf values (list (gethash "blue" colors)

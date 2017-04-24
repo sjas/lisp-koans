@@ -18,7 +18,26 @@
 (define-condition triangle-error  (error) ())
 
 (defun triangle (a b c)
-  :write-me)
+  (cond
+    ((and
+      (and
+       (> a 0)
+       (> b 0)
+       (> c 0))
+      (and
+       (< a (+ b c))
+       (< b (+ a c))
+       (< c (+ a b)))) (cond
+                          ((= a b c) :equilateral)
+                          ((or
+                            (= a b)
+                            (= a c)
+                            (= b c)) :isosceles)
+                          ((and
+                            (/= a b)
+                            (/= a c)
+                            (/= b c)) :scalene)))
+     (t (error 'triangle-error))))
 
 
 (define-test test-equilateral-triangles-have-equal-sides
