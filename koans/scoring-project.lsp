@@ -42,45 +42,22 @@
 ; More scoring examples are given in the tests below:
 ; Your goal is to write the score method.
 
-;; (defun score (dice)
-;;   (let ((ll (length dice))
-;;        (x 0))
-;;     (labels ((1dice (dice) (setf x (car dice))
-;;                (cond ((= x 1) 100)
-;;                      ((= x 5) 50)
-;;                      (t 0)))
-;;              (2dice (dl) (+ (funcall #'1dice dice)))
-;;              (3sames (dice same3 rest) (cond ((---3sames))
-;;                                              (t ---otherwise))))
-;;       (cond ((= 1 ll) (1dice dice))
-;;             ((= 2 ll) (2dice dice))
-;;             ((and (< 2 ll)
-;;                   (>= 5 ll))
-;;              (let ((sames 0)
-;;                    (rest '()))
-;;                (3sames dice sames rest)
-;;                (+ (* sames 1000) (score rest))))
-;;             ((< 5 ll) (error 'to-many-dice-error))
-;;             (t 0)))))
-
-; TODO this aint a proper solution, but has to do for now
-
 (defun score (dice)
-  (cond ((equal dice nil) 0)
-        ((equal dice '()) 0)
-        ((equal dice '(5)) 50)
-        ((equal dice '(1)) 100)
-        ((equal dice '(1 5 5 1)) 300)
-        ((equal dice '(2 3 4 6)) 0)
-        ((equal dice '(1 1 1)) 1000)
-        ((equal dice '(2 2 2)) 200)
-        ((equal dice '(3 3 3)) 300)
-        ((equal dice '(4 4 4)) 400)
-        ((equal dice '(5 5 5)) 500)
-        ((equal dice '(6 6 6)) 600)
-        ((equal dice '(2 5 2 2 3)) 250)
-        ((equal dice '(5 5 5 5)) 550)
-        ))
+  (labels
+      ((get-points (i count)
+         (cond
+           ((> count 3) (+ (get-points i (- count 3)) (get-points i 3)))
+           ((= count 3) (cond
+                          ((= i 1) 1000)
+                          (t (* i 100))))
+           ((= count 2) (* 2 (get-points i 1)))
+           ((= i 1) 100)
+           ((= i 5) 50)
+           (t 0))))
+    (cond ((= 0 (list-length dice)) 0)
+          (t (loop
+                for i in (remove-duplicates dice)
+                sum (get-points i (count i dice)))))))
 
 
 (define-test test-score-of-an-empty-list-is-zero
